@@ -20,8 +20,9 @@ License: MIT
 from .enhanced_translator import EnhancedTranslator
 from .offline_translator import OfflineTranslator
 from .config_loader import APIConfigLoader
+from .smart_code_translator import SmartCodeAwareTranslator
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "AI Assistant"
 __license__ = "MIT"
 
@@ -29,4 +30,5 @@ __all__ = [
     "EnhancedTranslator",
     "OfflineTranslator", 
     "APIConfigLoader",
+    "SmartCodeAwareTranslator",
 ]

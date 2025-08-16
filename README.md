@@ -30,6 +30,13 @@
 - **Batch Processing**: Translate multiple texts efficiently
 - **Configuration Management**: Flexible service configurations
 
+### 🛡️ **Smart Code Translation** (NEW!)
+- **Code-Aware Translation**: Translates code files while preserving syntax
+- **Multi-Language Support**: Python, JavaScript, Java, C/C++, and more
+- **Intelligent Text Detection**: Only translates natural language (comments, strings)
+- **Syntax Protection**: Keeps variables, functions, and keywords intact
+- **Backup Creation**: Automatic backup files for safety
+
 ### 🛠️ **Developer Friendly**
 - **CLI Interface**: Easy command-line usage
 - **Python API**: Simple programmatic access
@@ -55,18 +62,19 @@ ln -s $(pwd)/translate-cli.py /usr/local/bin/translatecore
 ### Basic Usage
 
 ```python
-from src.translatecore import EnhancedTranslator
+from src.translatecore import EnhancedTranslator, SmartCodeAwareTranslator
 
 # Initialize with default configuration
-translator = EnhancedTranslator()
+translator = EnhancedTranslator(source_lang='ru', target_lang='en')
 
 # Simple translation
-result = translator.translate("Hello, world!", target_lang="es")
-print(result.translated_text)  # ¡Hola, mundo!
+result = translator.translate("Привет, мир!")
+print(result.translated)  # Hello, world!
 
-# With source language specified
-result = translator.translate("Bonjour", source_lang="fr", target_lang="en")
-print(result.translated_text)  # Hello
+# Smart code translation (NEW!)
+code_translator = SmartCodeAwareTranslator(source_lang='ru', target_lang='en')
+result = code_translator.translate_file_smart(Path('my_script.py'))
+# Translates only comments and strings, preserves all code syntax
 ```
 
 ### CLI Usage
@@ -84,8 +92,8 @@ print(result.translated_text)  # Hello
 # Interactive mode
 ./translate-cli.py -i
 
-# 🔥 Code-aware translation (NEW!)
-./translate-cli.py --code-mode -f script.py -t russian
+# 🔥 Smart code translation (NEW!)
+python -c "from src.translatecore import SmartCodeAwareTranslator; from pathlib import Path; SmartCodeAwareTranslator('auto', 'english').translate_file_smart(Path('script.py'))"
 # Translates only comments and docstrings, preserves code syntax
 ```
 
@@ -142,63 +150,116 @@ Offline translation supports 40+ languages including:
 - **Asian**: Chinese, Japanese, Korean, Arabic, Hindi
 - **Others**: Ukrainian, Turkish, Swedish, Norwegian, and more
 
-## 💻 Code Translation (Smart Feature)
+## 🛡️ Smart Code Translation
 
 **The Problem**: Traditional translators break code by translating keywords, function names, and syntax.
 
-**Our Solution**: TranslateCore includes a smart code-aware translation mode that:
+**Our Solution**: TranslateCore's `SmartCodeAwareTranslator` offers intelligent code translation that:
 
-✅ **Translates ONLY comments and docstrings**  
-✅ **Preserves all programming language keywords** (`def`, `class`, `function`, etc.)  
-✅ **Keeps function and variable names intact**  
-✅ **Maintains perfect code syntax**  
+✅ **Translates ONLY natural language** (comments, docstrings, user-facing strings)  
+✅ **Preserves all programming syntax** (`def`, `class`, `function`, variables, etc.)  
+✅ **Protects complex expressions** (f-strings, dictionary keys, function calls)  
+✅ **Maintains perfect code execution** - translated code runs identically  
+✅ **Creates automatic backups** for safety  
+✅ **Validates syntax** before saving changes
 
-### Example
-
-```python
-# Original Python code
-def calculate_sum(a, b):
-    """Calculate the sum of two numbers"""
-    # This function adds two numbers
-    result = a + b
-    print("Task completed")  # Show completion message
-    return result
-```
-
-```bash
-# Translate to Russian with --code-mode
-./translate-cli.py --code-mode -f script.py -t russian
-```
+### Real-World Example
 
 ```python
-# Result: Only comments/docstrings translated
-def calculate_sum(a, b):
-    """Вычислить сумму двух чисел"""
-    # Эта функция складывает два числа
-    result = a + b
-    print("Task completed")  # Показать сообщение о завершении
-    return result
+# Original Russian code with complex structures
+class ТестовыйКласс:
+    """Тестовый класс для демонстрации"""
+    МАКСИМУМ = 100  # Константа с русским названием
+    
+    def __init__(self, название: str):
+        self.название = название
+        # Сложная f-строка с вложениями
+        сообщение = f"Создан объект '{self.название}' с максимумом {self.МАКСИМУМ}"
+        print(сообщение)
+    
+    def обработать_данные(self, данные: dict) -> dict:
+        """Обрабатывает входящие данные"""
+        результат = {
+            'статус': 'обработано',  # Ключ словаря на русском
+            'количество': len(данные)
+        }
+        return результат
 ```
 
-### Supported Programming Languages
-- **Python** (.py files)
-- **JavaScript** (.js, .ts files)
-- **Java** (.java files)
-- **C/C++** (.c, .cpp, .h files)
-- **More languages coming soon!**
+```python
+# Usage
+from pathlib import Path
+from src.translatecore import SmartCodeAwareTranslator
 
-### Code Translation Options
-
-```bash
-# Translate only comments (default)
-./translate-cli.py --code-mode -f script.py -t spanish
-
-# Also translate string literals (use with caution!)
-./translate-cli.py --code-mode --translate-strings -f script.py -t german
-
-# Batch translate multiple code files
-find . -name "*.py" -exec ./translate-cli.py --code-mode -f {} -t russian \;
+translator = SmartCodeAwareTranslator(source_lang='auto', target_lang='english')
+result = translator.translate_file_smart(Path('russian_code.py'))
 ```
+
+```python
+# Result: Smart translation with syntax protection
+class TestClass:  # ← Variable names translated intelligently
+    """Test class for demonstration"  # ← Docstring translated
+    MAXIMUM = 100  # Constant with Russian name ← Comment translated
+    
+    def __init__(self, name: str):  # ← Parameters translated
+        self.name = name  # ← Attributes translated
+        # Complex f-string with nesting ← Comment translated
+        message = f"Object created '{self.name}' with maximum {self.MAXIMUM}"  # ← String content translated
+        print(message)
+    
+    def process_data(self, data: dict) -> dict:  # ← Method names translated
+        """Processes incoming data"  # ← Docstring translated
+        result = {
+            'status': 'processed',  # Dictionary key on Russian ← Key and comment translated
+            'count': len(data)  # ← Key translated, len() preserved
+        }
+        return result
+```
+
+### Smart Translation Features
+
+🔍 **Intelligent Detection**: Automatically identifies what needs translation  
+🛡️ **Code Protection**: Uses advanced placeholder system for code expressions  
+⚡ **Fast Processing**: Optimized for large codebases  
+✅ **Syntax Validation**: Ensures translated code compiles correctly  
+📁 **Backup Safety**: Creates .backup files automatically  
+🧠 **Context Aware**: Understands programming context vs natural language
+
+### Usage Examples
+
+```python
+# Basic usage
+from src.translatecore import SmartCodeAwareTranslator
+from pathlib import Path
+
+# Create translator
+translator = SmartCodeAwareTranslator(
+    source_lang='auto',  # Auto-detect source language
+    target_lang='english'
+)
+
+# Translate a single file
+success = translator.translate_file_smart(Path('my_script.py'))
+if success:
+    print("✅ Translation completed successfully!")
+
+# Batch translate multiple files
+files = ['script1.py', 'script2.py', 'module.py']
+results = translator.run_smart_translation(files)
+print(f"Processed {results['files_processed']} files")
+print(f"Made {results['translations_made']} translations")
+```
+
+### What Gets Translated vs Protected
+
+| ✅ **TRANSLATED** | 🛡️ **PROTECTED** |
+|-------------------|------------------|
+| Comments (`# text`) | Keywords (`def`, `class`, `import`) |
+| Docstrings (`"""text"""`) | Function names (`calculate_sum()`) |
+| User-facing strings | Variable names (`user_data`) |
+| Dictionary keys (when appropriate) | Built-in functions (`len()`, `print()`) |
+| Error messages | Code expressions (`{variable}`) |
+| Log messages | Syntax symbols (`{}`, `[]`, `()`) |
 
 ## 🐳 Docker Support
 
@@ -271,11 +332,24 @@ The main translator class with full online/offline capabilities.
 
 ```python
 class EnhancedTranslator:
-    def __init__(self, config_name: str = "development")
-    def translate(self, text: str, source_lang: str = "auto", target_lang: str = "english") -> TranslationResult
-    def detect_language(self, text: str) -> str
-    def get_supported_languages(self) -> List[str]
-    def get_translation_history(self) -> List[TranslationResult]
+    def __init__(self, source_lang: str, target_lang: str)
+    def translate(self, text: str, use_cache: bool = True) -> TranslationResult
+    def translate_batch(self, texts: List[str]) -> List[TranslationResult]
+    def get_stats(self) -> Dict[str, Any]
+    def clear_cache(self) -> None
+```
+
+### SmartCodeAwareTranslator (NEW!)
+
+Intelligent code translation with syntax protection.
+
+```python
+class SmartCodeAwareTranslator:
+    def __init__(self, source_lang: str = "auto", target_lang: str = "english")
+    def translate_file_smart(self, filepath: Path) -> bool
+    def run_smart_translation(self, files: List[str]) -> Dict
+    def needs_translation(self, text: str) -> bool
+    def detect_text_script(self, text: str) -> str
 ```
 
 ### OfflineTranslator
@@ -295,12 +369,13 @@ class OfflineTranslator:
 ```python
 @dataclass
 class TranslationResult:
-    translated_text: str
-    source_language: str
-    target_language: str
-    service_used: str
-    translation_time: float
-    confidence_score: Optional[float] = None
+    original: str
+    translated: str
+    source_lang: str
+    target_lang: str
+    service: str
+    confidence: float = 0.0
+    alternatives: List[str] = None
 ```
 
 ## 🔧 Advanced Usage
@@ -309,22 +384,30 @@ class TranslationResult:
 
 ```python
 # Create custom translator with specific services
-translator = EnhancedTranslator()
-translator.configure_services({
-    "services": ["offline", "google"],
-    "fallback_chain": ["offline", "google"],
-    "timeout": 15,
-    "cache_enabled": True
-})
+translator = EnhancedTranslator(
+    source_lang='ru', 
+    target_lang='en',
+    preferred_services=['offline', 'google'],
+    config_file='translation_api_config.json',
+    service_config_name='development'
+)
 ```
 
 ### Batch Translation
 
 ```python
+# Regular text translation
+translator = EnhancedTranslator(source_lang='en', target_lang='es')
 texts = ["Hello", "World", "How are you?"]
-results = translator.batch_translate(texts, target_lang="es")
+results = translator.translate_batch(texts)
 for result in results:
-    print(f"{result.source_text} -> {result.translated_text}")
+    print(f"{result.original} -> {result.translated}")
+
+# Smart code translation
+code_translator = SmartCodeAwareTranslator(source_lang='ru', target_lang='en')
+files = ['script1.py', 'script2.py', 'module.py']
+results = code_translator.run_smart_translation(files)
+print(f"Successfully processed {results['success_count']} files")
 ```
 
 ### Error Handling
