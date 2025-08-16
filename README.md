@@ -43,8 +43,8 @@
 
 ```bash
 # Install from source
-git clone https://github.com/yourusername/translatecore.git
-cd translatecore
+git clone https://github.com/rokoss21/TranslateCore.git
+cd TranslateCore
 pip install -r requirements.txt
 
 # Make CLI available globally
@@ -283,8 +283,8 @@ We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.
 ### Development Setup
 
 ```bash
-git clone https://github.com/yourusername/translatecore.git
-cd translatecore
+git clone https://github.com/rokoss21/TranslateCore.git
+cd TranslateCore
 
 # Install development dependencies
 pip install -r requirements-dev.txt
@@ -327,6 +327,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ for the developer community**
 
-[⭐ Star this repo](https://github.com/yourusername/translatecore) | [🐛 Report Bug](https://github.com/yourusername/translatecore/issues) | [💡 Request Feature](https://github.com/yourusername/translatecore/issues)
+[⭐ Star this repo](https://github.com/rokoss21/TranslateCore) | [🐛 Report Bug](https://github.com/rokoss21/TranslateCore/issues) | [💡 Request Feature](https://github.com/rokoss21/TranslateCore/issues)
+
+**Created by Emil Rokossovskiy**
 
 </div>
