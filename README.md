@@ -1,11 +1,12 @@
 # 🌍 TranslateCore
 
-[![Version](https://img.shields.io/badge/version-1.1.4-brightgreen.svg)](https://github.com/rokoss21/TranslateCore)
+[![Version](https://img.shields.io/badge/version-1.1.4-brightgreen.svg)](https://github.com/rokoss21/TranslateCore/releases)
 [![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/docker-supported-blue.svg)](https://docker.com)
 [![Offline](https://img.shields.io/badge/offline-supported-green.svg)](#offline-translation)
 [![Smart Code Translation](https://img.shields.io/badge/code_translation-supported-orange.svg)](#smart-code-translation)
+[![Release Date](https://img.shields.io/badge/released-August_2025-blue.svg)](https://github.com/rokoss21/TranslateCore/releases/tag/v1.1.4)
 
 **TranslateCore** is a powerful, multilingual translation library that seamlessly combines offline and online translation capabilities. Built for production use, it offers automatic service fallback, intelligent caching, and support for multiple translation providers.
 
