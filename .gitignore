@@ -1,0 +1,85 @@
+# API ключи и конфигурации - НЕ ПУБЛИКОВАТЬ!
+translation_api_config.json
+*api_config*.json
+*.api_keys
+
+# Кеши переводов
+translation_cache_*.json
+*_cache*.json
+
+# Резервные копии файлов
+backup_before_translation_*/
+*_backup/
+*.backup
+
+# Временные файлы
+temp_config_*.json
+*.tmp
+
+# Логи
+*.log
+app.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Результаты тестирования
+*test_results*.json
+*_results.json
+
+# Docker и контейнеризация
+.env
+.env.local
+.env.*.local
+data/
+cache/
+logs/
+custom_configs/
+docker-compose.override.yml
+
+# Личные заметки и черновики
+notes.md
+draft*.md
+todo*.txt

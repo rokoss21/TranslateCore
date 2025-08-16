@@ -1,0 +1,90 @@
+# 🐳 TranslateCore Docker Compose Configuration
+version: '3.8'
+
+services:
+  translatecore:
+    build: .
+    container_name: translatecore
+    hostname: translatecore
+    
+    # Интерактивный режим
+    stdin_open: true
+    tty: true
+    
+    # Переменные окружения для API ключей (опционально)
+    environment:
+      - DEEPL_API_KEY=${DEEPL_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - MICROSOFT_API_KEY=${MICROSOFT_API_KEY:-}
+      - LIBRETRANSLATE_URL=${LIBRETRANSLATE_URL:-}
+      - LIBRETRANSLATE_API_KEY=${LIBRETRANSLATE_API_KEY:-}
+      - PYTHONPATH=/app
+      - TRANSLATE_DATA_DIR=/app/data
+      - TRANSLATE_CACHE_DIR=/app/cache
+      - TRANSLATE_LOG_DIR=/app/logs
+      
+    # Persistent volumes для данных пользователя
+    volumes:
+      - translatecore_data:/app/data
+      - translatecore_cache:/app/cache  
+      - translatecore_logs:/app/logs
+      - ./custom_configs:/app/custom_configs:ro  # Для пользовательских конфигов
+      
+    # Restart policy
+    restart: unless-stopped
+    
+    # Resource limits (опционально)
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+
+  # Опционально: LibreTranslate server для полной автономности
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    container_name: libretranslate_server
+    hostname: libretranslate
+    profiles: ["with-libretranslate"]  # Запуск только при указании профиля
+    
+    ports:
+      - "5000:5000"
+      
+    environment:
+      - LT_DISABLE_WEB_UI=false
+      - LT_API_KEYS=true
+      - LT_REQUIRE_API_KEY_ORIGIN=false
+      
+    volumes:
+      - libretranslate_data:/app/db
+      
+    restart: unless-stopped
+    
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '4.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+
+# Named volumes для persistence
+volumes:
+  translatecore_data:
+    driver: local
+  translatecore_cache:
+    driver: local
+  translatecore_logs:
+    driver: local
+  libretranslate_data:
+    driver: local
+
+# Network для связи между сервисами
+networks:
+  default:
+    driver: bridge
+    name: translatecore_network

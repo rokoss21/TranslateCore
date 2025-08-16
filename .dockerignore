@@ -1,0 +1,68 @@
+# 🐳 Docker Build Context Exclusions
+
+# Git и система контроля версий
+.git/
+.gitignore
+.gitattributes
+
+# Docker файлы (кроме Dockerfile)
+.dockerignore
+docker-compose*.yml
+.env*
+
+# Документация (кроме README)
+docs/
+*.md
+!README.md
+
+# Тесты (не нужны в production образе)
+tests/
+pytest.ini
+.pytest_cache/
+
+# Python cache и временные файлы
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE и редакторы
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Логи и временные файлы
+*.log
+logs/
+cache/
+data/
+tmp/
+temp/
+
+# Пользовательские конфигурации
+custom_configs/
+user_settings/
+
+# Кэш переводов (будет пересоздан)
+translation_cache_*.json
+offline_cache_*.json

@@ -1,0 +1,75 @@
+# 🐳 TranslateCore Test Docker Container
+# Быстрая версия для тестирования без предварительной загрузки пакетов
+
+FROM python:3.11-slim
+
+# Метаданные
+LABEL maintainer="TranslateCore Team"
+LABEL description="TranslateCore test container"
+LABEL version="1.0.0-test"
+
+# Установка системных зависимостей
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Создание пользователя для безопасности
+RUN useradd -m -u 1000 translator && \
+    mkdir -p /app && \
+    chown -R translator:translator /app
+
+# Установка рабочей директории
+WORKDIR /app
+
+# Копирование файлов requirements
+COPY requirements.txt* ./
+RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.txt; fi
+
+# Установка основных зависимостей TranslateCore
+RUN pip install --no-cache-dir \
+    deep-translator==1.11.4 \
+    requests>=2.28.0 \
+    argostranslate>=1.8.0 \
+    colorama>=0.4.6
+
+# Копирование исходного кода
+COPY --chown=translator:translator . .
+
+# Создание директорий
+RUN mkdir -p /app/data /app/cache /app/logs && \
+    chown -R translator:translator /app/data /app/cache /app/logs
+
+# Установка прав на выполнение
+RUN chmod +x translate-cli.py docker-translate-cli.py scripts/*.sh examples/*.py || true
+
+# Создание alias для удобства использования в Docker
+RUN echo '#!/bin/bash' > /app/translatecore && \
+    echo 'python3 /app/docker-translate-cli.py "$@"' >> /app/translatecore && \
+    chmod +x /app/translatecore
+
+# Переключение на пользователя translator
+USER translator
+
+# Переменные окружения
+ENV PYTHONPATH=/app/src:/app
+ENV TRANSLATE_DATA_DIR=/app/data
+ENV TRANSLATE_CACHE_DIR=/app/cache
+ENV TRANSLATE_LOG_DIR=/app/logs
+ENV PATH=/app:$PATH
+
+# Volumes для персистентных данных
+VOLUME ["/app/data", "/app/cache", "/app/logs"]
+
+# Создание алиаса в bashrc
+RUN echo 'alias translate-cli="python3 /app/docker-translate-cli.py"' >> ~/.bashrc
+
+# Точка входа
+ENTRYPOINT ["/bin/bash", "-c"]
+CMD ["echo '🌍 TranslateCore Docker Container Ready!' && echo '' && echo 'Available commands:' && echo '  translatecore --help                    # CLI help' && echo '  translatecore \"Hello World\"              # Quick translation' && echo '  translatecore -i                        # Interactive mode' && echo '  python3 /app/examples/basic_usage.py   # Examples' && echo '' && echo 'Direct Python API:' && echo '  python3 -c \"import sys; sys.path.insert(0,\\\"/app/src\\\"); from translatecore import OfflineTranslator; print(\\\"✅ API ready!\\\")\"' && echo '' && exec /bin/bash"]
+
+# Простой healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python3 -c "print('✅ Container healthy')" || exit 1
