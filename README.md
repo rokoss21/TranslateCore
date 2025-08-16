@@ -1,9 +1,11 @@
 # 🌍 TranslateCore
 
+[![Version](https://img.shields.io/badge/version-1.1.4-brightgreen.svg)](https://github.com/rokoss21/TranslateCore)
 [![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/docker-supported-blue.svg)](https://docker.com)
 [![Offline](https://img.shields.io/badge/offline-supported-green.svg)](#offline-translation)
+[![Smart Code Translation](https://img.shields.io/badge/code_translation-supported-orange.svg)](#smart-code-translation)
 
 **TranslateCore** is a powerful, multilingual translation library that seamlessly combines offline and online translation capabilities. Built for production use, it offers automatic service fallback, intelligent caching, and support for multiple translation providers.
 
@@ -459,10 +461,50 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **translate** library for online service integrations
 - All contributors and testers who helped improve this project
 
+## 📋 Version History
+
+### 🚀 Version 1.1.4 (Current)
+**Released**: August 2025  
+**Major Features**:
+- ✨ **NEW**: SmartCodeAwareTranslator with intelligent code translation
+- 🛡️ Advanced syntax protection for Python code files
+- 🧠 Context-aware natural language detection
+- 📁 Automatic backup creation with syntax validation
+- 🔧 Enhanced integration with existing TranslateCore ecosystem
+- 📚 Updated API documentation and examples
+
+<details>
+<summary><b>📖 Previous Versions</b></summary>
+
+### Version 1.0.1
+**Released**: July 2025
+- 🔌 Enhanced offline translation with Argos Translate
+- 🌐 Multiple online service support (Google, DeepL, etc.)
+- ⚡ Automatic service fallback system
+- 💾 Translation caching improvements
+- 🐳 Docker containerization support
+
+### Version 1.0.0
+**Released**: June 2025
+- 🎉 Initial release of TranslateCore
+- 🔧 Basic translation functionality
+- 📦 CLI interface implementation
+- 🏗️ Core architecture establishment
+
+</details>
+
+### 🔮 Upcoming Features (v1.2.0)
+- 📱 Web interface for TranslateCore
+- 🔄 Real-time collaborative translation
+- 📊 Advanced analytics and reporting
+- 🌍 Support for more programming languages
+- 🤖 AI-powered translation suggestions
+
 ## 🔗 Links
 
 - **Documentation**: [docs/](docs/)
 - **Test Reports**: [docs/test-report.md](docs/test-report.md)
+- **Releases**: [GitHub Releases](https://github.com/rokoss21/TranslateCore/releases)
 - **Docker Hub**: *Coming soon*
 - **PyPI**: *Coming soon*
 

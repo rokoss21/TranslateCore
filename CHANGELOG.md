@@ -1,9 +1,42 @@
-# Changelog
+# 📋 Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to TranslateCore will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.1.4] - 2025-08-16
+
+### ✨ Added
+- **SmartCodeAwareTranslator**: Revolutionary intelligent code translation system
+- **Code Syntax Protection**: Advanced placeholder system for preserving programming constructs
+- **Context-Aware Translation**: Smart detection of natural language vs code elements
+- **Automatic Backup Creation**: Safety system with .backup files before translation
+- **Syntax Validation**: Post-translation code compilation checks
+- **Multi-Language Code Support**: Initial support for Python, with more languages planned
+
+### 🛡️ Security
+- Code expressions protected from accidental translation
+- Variables, functions, and keywords preserved intact
+- Safe placeholder substitution system
+
+### 🔧 Enhanced
+- Updated API documentation with SmartCodeAwareTranslator examples
+- Improved integration with existing TranslateCore ecosystem
+- Enhanced error handling and validation
+- Better type hints and code documentation
+
+### 📚 Documentation
+- Comprehensive README updates with real-world examples
+- API reference for new smart translation methods
+- Usage examples for Russian-to-English code translation
+- Version history and roadmap sections
+
+### 🧪 Testing
+- Full test coverage for SmartCodeAwareTranslator
+- Integration tests with existing components
+- Real-world code translation validation
+- 100% test pass rate across all components
 
 ## [1.0.0] - 2025-01-16
 
