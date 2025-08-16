@@ -581,6 +581,14 @@ def create_argument_parser(cli: TranslateCLI) -> argparse.ArgumentParser:
                        action='store_true',
                        help='Подробный вывод')
     
+    parser.add_argument('--code-mode',
+                       action='store_true',
+                       help='Code-aware translation (preserves syntax)')
+    
+    parser.add_argument('--translate-strings',
+                       action='store_true',
+                       help='Also translate string literals in code mode')
+    
     return parser
 
 def main():

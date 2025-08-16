@@ -83,6 +83,10 @@ print(result.translated_text)  # Hello
 
 # Interactive mode
 ./translate-cli.py -i
+
+# 🔥 Code-aware translation (NEW!)
+./translate-cli.py --code-mode -f script.py -t russian
+# Translates only comments and docstrings, preserves code syntax
 ```
 
 ## 📖 Configuration
@@ -137,6 +141,64 @@ Offline translation supports 40+ languages including:
 - **European**: English, Spanish, French, German, Italian, Portuguese, Russian, Polish, Czech, Dutch
 - **Asian**: Chinese, Japanese, Korean, Arabic, Hindi
 - **Others**: Ukrainian, Turkish, Swedish, Norwegian, and more
+
+## 💻 Code Translation (Smart Feature)
+
+**The Problem**: Traditional translators break code by translating keywords, function names, and syntax.
+
+**Our Solution**: TranslateCore includes a smart code-aware translation mode that:
+
+✅ **Translates ONLY comments and docstrings**  
+✅ **Preserves all programming language keywords** (`def`, `class`, `function`, etc.)  
+✅ **Keeps function and variable names intact**  
+✅ **Maintains perfect code syntax**  
+
+### Example
+
+```python
+# Original Python code
+def calculate_sum(a, b):
+    """Calculate the sum of two numbers"""
+    # This function adds two numbers
+    result = a + b
+    print("Task completed")  # Show completion message
+    return result
+```
+
+```bash
+# Translate to Russian with --code-mode
+./translate-cli.py --code-mode -f script.py -t russian
+```
+
+```python
+# Result: Only comments/docstrings translated
+def calculate_sum(a, b):
+    """Вычислить сумму двух чисел"""
+    # Эта функция складывает два числа
+    result = a + b
+    print("Task completed")  # Показать сообщение о завершении
+    return result
+```
+
+### Supported Programming Languages
+- **Python** (.py files)
+- **JavaScript** (.js, .ts files)
+- **Java** (.java files)
+- **C/C++** (.c, .cpp, .h files)
+- **More languages coming soon!**
+
+### Code Translation Options
+
+```bash
+# Translate only comments (default)
+./translate-cli.py --code-mode -f script.py -t spanish
+
+# Also translate string literals (use with caution!)
+./translate-cli.py --code-mode --translate-strings -f script.py -t german
+
+# Batch translate multiple code files
+find . -name "*.py" -exec ./translate-cli.py --code-mode -f {} -t russian \;
+```
 
 ## 🐳 Docker Support
 
