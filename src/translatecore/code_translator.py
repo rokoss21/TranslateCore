@@ -71,11 +71,18 @@ class CodeTranslator:
         
         # Extract single-line comments
         if self.config.translate_comments:
-            for match in re.finditer(r'#.*$|//.*$', code, re.MULTILINE):
-                comment_text = match.group().lstrip('#').lstrip('/').strip()
+            for match in re.finditer(r'(#|//)(.*?)$', code, re.MULTILINE):
+                comment_prefix = match.group(1)
+                comment_text = match.group(2).strip()
                 if comment_text and not self._is_code_like(comment_text):
+                    # Store the start position after the comment marker and any spaces
+                    comment_start = match.start(2)
+                    # Find the actual start of text content (skip spaces after #)
+                    actual_text_start = match.start(2)
+                    while actual_text_start < match.end(2) and code[actual_text_start] == ' ':
+                        actual_text_start += 1
                     translatable_parts.append((
-                        comment_text, match.start(), match.end(), 'comment'
+                        comment_text, actual_text_start, match.end(2), 'comment'
                     ))
         
         # Extract multi-line comments and docstrings
@@ -155,7 +162,14 @@ class CodeTranslator:
         
         for text, start, end, part_type in translatable_parts:
             try:
-                result = self.translator.translate(text, source_lang=source_lang, target_lang=target_lang)
+                # Check if the translator supports source_lang and target_lang parameters
+                import inspect
+                translate_params = inspect.signature(self.translator.translate).parameters
+                if 'source_lang' in translate_params and 'target_lang' in translate_params:
+                    result = self.translator.translate(text, source_lang=source_lang, target_lang=target_lang)
+                else:
+                    # Call with available parameters
+                    result = self.translator.translate(text)
                 translated_text = result.translated if hasattr(result, 'translated') else str(result)
                 
                 # Apply translation to code

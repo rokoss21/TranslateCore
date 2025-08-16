@@ -703,6 +703,64 @@ def main():
         target_lang = args.target or cli.settings['default_target']
         service_config = args.config or cli.settings['default_service_config']
         
+        # Check if code mode is enabled
+        if args.code_mode:
+            # Import here to avoid circular imports
+            try:
+                from .code_translator import CodeTranslator, CodeTranslationConfig
+            except ImportError:
+                from src.translatecore.code_translator import CodeTranslator, CodeTranslationConfig
+            
+            # Create enhanced translator for code translation
+            translator = EnhancedTranslator(
+                source_lang=args.source or 'auto',
+                target_lang=target_lang,
+                config_file=cli.config_file,
+                service_config_name=service_config
+            )
+            
+            # Configure code translation settings
+            config = CodeTranslationConfig(
+                translate_comments=True,
+                translate_docstrings=True,
+                translate_strings=args.translate_strings,
+                preserve_keywords=True,
+                preserve_function_names=True,
+                preserve_variable_names=True
+            )
+            
+            # Create code translator
+            code_translator = CodeTranslator(translator, config)
+            
+            # Translate code
+            result = code_translator.translate_code(
+                text, 
+                target_lang=target_lang,
+                source_lang=args.source or 'auto'
+            )
+            
+            # Display results
+            if args.quiet:
+                print(result['translated_code'])
+            else:
+                print("\n" + "═" * 60)
+                colored_print(f"🔍 Language detected: {result['language_detected']}", Colors.BLUE)
+                colored_print(f"📝 Translations made: {len(result['translations'])}", Colors.GREEN)
+                
+                if args.verbose:
+                    colored_print("\n🔄 Translation details:", Colors.CYAN, bold=True)
+                    for trans in result['translations']:
+                        print(f"  • {trans['type']}: '{trans['original']}' → '{trans['translated']}'")
+                
+                print("\n" + "─" * 40)
+                colored_print("📄 Translated Code:", Colors.HEADER, bold=True)
+                print("─" * 40)
+                print(result['translated_code'])
+                print("═" * 60)
+            
+            return
+        
+        # Regular text translation
         result = cli.smart_translate(
             text=text,
             source_lang=args.source,
